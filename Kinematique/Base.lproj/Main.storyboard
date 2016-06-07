@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="9le-ke-u6u">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+    </dependencies>
+    <scenes>
+        <!--Tracer View Controller-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController id="BYZ-38-t0r" customClass="TracerViewController" customModule="Kinematique" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
+                        <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="64" width="600" height="492"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="en4-qc-aGB" customClass="TracerView" customModule="Kinematique" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="492"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <gestureRecognizers/>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="mYk-uV-od7" appends="YES" id="xV7-ei-Mae"/>
+                                </connections>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="en4-qc-aGB" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="17z-ho-YnC"/>
+                            <constraint firstItem="en4-qc-aGB" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="9ee-XW-x5r"/>
+                            <constraint firstItem="en4-qc-aGB" firstAttribute="height" secondItem="8bC-Xf-vdC" secondAttribute="height" id="H44-OC-FeA"/>
+                            <constraint firstItem="en4-qc-aGB" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" id="WqI-2y-sBe"/>
+                        </constraints>
+                    </view>
+                    <extendedEdge key="edgesForExtendedLayout"/>
+                    <toolbarItems>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="vXp-9q-SZH"/>
+                        <barButtonItem title="Circular" id="Igg-A0-lvR">
+                            <connections>
+                                <action selector="circular:" destination="BYZ-38-t0r" id="0YP-h2-AWc"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem title="Parabolic" id="vr2-gK-Lxw">
+                            <connections>
+                                <action selector="parabolic:" destination="BYZ-38-t0r" id="QFi-pw-Mb0"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem title="Clear" id="QdI-kT-8cs">
+                            <connections>
+                                <action selector="clear:" destination="BYZ-38-t0r" id="dzU-vW-9xM"/>
+                            </connections>
+                        </barButtonItem>
+                    </toolbarItems>
+                    <navigationItem key="navigationItem" id="x27-tW-PJB">
+                        <barButtonItem key="rightBarButtonItem" title="Next" id="RAv-IO-sOd"/>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="circularButton" destination="Igg-A0-lvR" id="B4h-Fm-bGx"/>
+                        <outlet property="clearButton" destination="QdI-kT-8cs" id="RoQ-AW-bmJ"/>
+                        <outlet property="nextButton" destination="RAv-IO-sOd" id="zzZ-4S-yTp"/>
+                        <outlet property="parabolicButton" destination="vr2-gK-Lxw" id="gnt-MV-mep"/>
+                        <outlet property="tracerView" destination="en4-qc-aGB" id="2fa-vj-y7j"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="mYk-uV-od7">
+                    <connections>
+                        <action selector="viewTapped:" destination="BYZ-38-t0r" id="DSl-Ev-nqE"/>
+                    </connections>
+                </tapGestureRecognizer>
+            </objects>
+            <point key="canvasLocation" x="1117" y="429"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="6YN-co-kSQ">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" toolbarHidden="NO" id="9le-ke-u6u" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="1vM-d4-D72">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="ayH-Lv-B84">
+                        <rect key="frame" x="0.0" y="556" width="600" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </toolbar>
+                    <connections>
+                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="4Kw-kh-QnM"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Rq5-0b-qak" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="285" y="1089"/>
+        </scene>
+    </scenes>
+</document>
