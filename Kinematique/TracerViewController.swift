@@ -21,10 +21,11 @@ class TracerViewController: UIViewController {
     
     let userSelections = UserSelections.sharedInstance
     let dataModel = DataModel.sharedInstance
+    let animationTiming = AnimationTiming.sharedInstance
     
     private func _clear() {
-        userSelections.tracerResetTime = CFAbsoluteTimeGetCurrent()
-        userSelections.tracerTimeInterval = 0
+        animationTiming.tracerResetTime = CFAbsoluteTimeGetCurrent()
+        animationTiming.tracerTimeInterval = 0
         dataModel.points.removeAll()
         dataModel.initialTime = nil
         dataModel.times.removeAll()
@@ -38,14 +39,16 @@ class TracerViewController: UIViewController {
     }
     
     @IBAction func circular(sender: UIBarButtonItem) {
-        userSelections.showingParabolic = false
+        dataModel.showingCircularMotion = true
+        dataModel.motionFunction = circularMotionFunctionForFrameSize(tracerView.frame.size)
         circularButton.style = .Done
         parabolicButton.style = .Plain
         _clear()
     }
     
     @IBAction func parabolic(sender: UIBarButtonItem) {
-        userSelections.showingParabolic = true
+        dataModel.showingCircularMotion = false
+        dataModel.motionFunction = parabolicMotionFunctionForFrameSize(tracerView.frame.size)
         circularButton.style = .Plain
         parabolicButton.style = .Done
         _clear()
@@ -62,7 +65,7 @@ class TracerViewController: UIViewController {
         }
         dataModel.points.append(point)
         dataModel.times.append(now - dataModel.initialTime)
-        let sanitizedPoint = userSelections.showingParabolic ? tracerView.parabolicMotion(now) : tracerView.circularMotion(now)
+        let sanitizedPoint = dataModel.motionFunction(now)
         dataModel.sanitizedPoints.append(sanitizedPoint)
         
         dataModel.labels.append(String(dataModel.points.count))
@@ -83,20 +86,23 @@ class TracerViewController: UIViewController {
         displayLink = CADisplayLink(target:self, selector:#selector(prepareForVSync(_:)))
         displayLink.addToRunLoop(NSRunLoop.currentRunLoop(), forMode:NSRunLoopCommonModes)
         displayLink.paused = true
-        // positionsView.allPositionsShowing = true
         nextButton.enabled = false
         circularButton.style = .Done
         parabolicButton.style = .Plain
+
+    }
+    
+    override func viewDidLayoutSubviews() {
+        let frameSize = tracerView.frame.size
+        dataModel.motionFunction = dataModel.showingCircularMotion ? circularMotionFunctionForFrameSize(frameSize) : parabolicMotionFunctionForFrameSize(frameSize)
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        userSelections.tracerResetTime = CFAbsoluteTimeGetCurrent()
-        userSelections.tracerTimeInterval = 0
+        animationTiming.tracerResetTime = CFAbsoluteTimeGetCurrent()
+        animationTiming.tracerTimeInterval = 0
         tracerView.setNeedsDisplay()
         displayLink.paused = false
-        circularButton.style = userSelections.showingParabolic ? .Plain : .Done
-        parabolicButton.style = userSelections.showingParabolic ? .Done : .Plain
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -105,7 +111,8 @@ class TracerViewController: UIViewController {
     }
     
     func prepareForVSync(displayLink: CADisplayLink) {
-        userSelections.tracerTimeInterval = CFAbsoluteTimeGetCurrent() + displayLink.duration - userSelections.tracerResetTime
+        animationTiming.tracerTimeInterval = CFAbsoluteTimeGetCurrent() + displayLink.duration - animationTiming.tracerResetTime
+        dataModel.regenerateTracerPoints()
         tracerView.setNeedsDisplay()
     }
 

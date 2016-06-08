@@ -15,9 +15,14 @@ typealias Difference = (from: Int, to: Int)
 // In actuality, `to` is always `middle + 1` and `middle` is always `from + 1`.
 typealias SecondOrderDifference = (from: Int, middle: Int, to: Int)
 
+private let _shadowDuration: CFTimeInterval = 0.5
+let _shadowQuantity: Int = 7
+
 class DataModel {
     
     static let sharedInstance = DataModel()
+    
+    var anmimationTiming = AnimationTiming.sharedInstance
     
     var origin: CGPoint?
     
@@ -51,6 +56,27 @@ class DataModel {
         return secondOrderDifferences
     }
     
+    var showingCircularMotion = true
+    
+    var motionFunction: MotionFunction! = nil
+    
+    var tracerPoints: [CGPoint?] = Array<CGPoint?>(count: _shadowQuantity, repeatedValue:nil)
+    
+    func regenerateTracerPoints() {
+        guard let currentMotionFunction = motionFunction else {
+            tracerPoints = Array<CGPoint?>(count: _shadowQuantity, repeatedValue:nil)
+            return
+        }
+        for i in 0..<_shadowQuantity {
+            let shadowFraction = CFTimeInterval(i) / CFTimeInterval(_shadowQuantity)
+            let shadowTime = shadowFraction * _shadowDuration
+            let shadowTimeInterval = anmimationTiming.tracerTimeInterval - shadowTime
+            tracerPoints[i] = currentMotionFunction(shadowTimeInterval)
+        }
+    }
+    
+    let shadowFractions: [CFTimeInterval] = (0..<_shadowQuantity).map { CFTimeInterval($0) / CFTimeInterval(_shadowQuantity) }
+    
 }
 
 class UserSelections {
@@ -62,12 +88,6 @@ class UserSelections {
     var selectedDifference: Difference? = nil
     
     var selectedSecondOrderDifference: SecondOrderDifference? = nil
-    
-    var tracerResetTime: CFAbsoluteTime! = nil
-    
-    var tracerTimeInterval: CFTimeInterval = 0
-    
-    var showingParabolic: Bool = false
     
     var showingVelocities: Bool = false
     
@@ -83,5 +103,14 @@ class UserSelections {
         return [secondOrderDifference]
     }
     
+}
+
+class AnimationTiming {
+
+    static let sharedInstance = AnimationTiming()
+    
+    var tracerResetTime: CFAbsoluteTime! = nil
+    var tracerTimeInterval: CFTimeInterval = 0
+
 }
 

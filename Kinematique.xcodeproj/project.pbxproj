@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		D34F1C3D1D074E1A00072ED6 /* TracerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34F1C3C1D074E1A00072ED6 /* TracerView.swift */; };
 		D34F1C3F1D074EFB00072ED6 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34F1C3E1D074EFB00072ED6 /* Model.swift */; };
+		D34F1C411D07749B00072ED6 /* MotionFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34F1C401D07749B00072ED6 /* MotionFunctions.swift */; };
 		D3CC46A71D074A2000216941 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3CC46A61D074A2000216941 /* AppDelegate.swift */; };
 		D3CC46A91D074A2000216941 /* TracerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3CC46A81D074A2000216941 /* TracerViewController.swift */; };
 		D3CC46AC1D074A2000216941 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D3CC46AA1D074A2000216941 /* Main.storyboard */; };
@@ -19,6 +20,7 @@
 /* Begin PBXFileReference section */
 		D34F1C3C1D074E1A00072ED6 /* TracerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TracerView.swift; sourceTree = "<group>"; };
 		D34F1C3E1D074EFB00072ED6 /* Model.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
+		D34F1C401D07749B00072ED6 /* MotionFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MotionFunctions.swift; sourceTree = "<group>"; };
 		D3CC46A31D074A2000216941 /* Kinematique.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Kinematique.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D3CC46A61D074A2000216941 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D3CC46A81D074A2000216941 /* TracerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TracerViewController.swift; sourceTree = "<group>"; };
@@ -62,6 +64,7 @@
 				D3CC46A81D074A2000216941 /* TracerViewController.swift */,
 				D34F1C3C1D074E1A00072ED6 /* TracerView.swift */,
 				D34F1C3E1D074EFB00072ED6 /* Model.swift */,
+				D34F1C401D07749B00072ED6 /* MotionFunctions.swift */,
 				D3CC46AA1D074A2000216941 /* Main.storyboard */,
 				D3CC46AD1D074A2000216941 /* Assets.xcassets */,
 				D3CC46AF1D074A2000216941 /* LaunchScreen.storyboard */,
@@ -141,6 +144,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D34F1C411D07749B00072ED6 /* MotionFunctions.swift in Sources */,
 				D34F1C3D1D074E1A00072ED6 /* TracerView.swift in Sources */,
 				D3CC46A91D074A2000216941 /* TracerViewController.swift in Sources */,
 				D3CC46A71D074A2000216941 /* AppDelegate.swift in Sources */,
