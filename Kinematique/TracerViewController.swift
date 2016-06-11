@@ -27,7 +27,6 @@ class TracerViewController: UIViewController {
         animationTiming.tracerResetTime = CFAbsoluteTimeGetCurrent()
         animationTiming.tracerTimeInterval = 0
         dataModel.points.removeAll()
-        dataModel.initialTime = nil
         dataModel.times.removeAll()
         dataModel.labels.removeAll()
         userSelections.selectedDifference = nil
@@ -40,7 +39,6 @@ class TracerViewController: UIViewController {
     
     @IBAction func circular(sender: UIBarButtonItem) {
         dataModel.showingCircularMotion = true
-        dataModel.motionFunction = circularMotionFunctionForFrameSize(tracerView.frame.size)
         circularButton.style = .Done
         parabolicButton.style = .Plain
         _clear()
@@ -48,7 +46,6 @@ class TracerViewController: UIViewController {
     
     @IBAction func parabolic(sender: UIBarButtonItem) {
         dataModel.showingCircularMotion = false
-        dataModel.motionFunction = parabolicMotionFunctionForFrameSize(tracerView.frame.size)
         circularButton.style = .Plain
         parabolicButton.style = .Done
         _clear()
@@ -60,15 +57,14 @@ class TracerViewController: UIViewController {
     
     func addPoint(point: CGPoint) {
         let now = CFAbsoluteTimeGetCurrent()
-        if dataModel.points.count == 0 {
-            dataModel.initialTime = now
+        dataModel.times.append(now)
+        let motionFunction = dataModel.motionFunction()
+        let sanitizedPoint = motionFunction(now)
+        if sanitizedPoint != nil {
+            dataModel.sanitizedPoints.append(sanitizedPoint)
+            dataModel.points.append(point)
+            dataModel.labels.append(String(dataModel.points.count))
         }
-        dataModel.points.append(point)
-        dataModel.times.append(now - dataModel.initialTime)
-        let sanitizedPoint = dataModel.motionFunction(now)
-        dataModel.sanitizedPoints.append(sanitizedPoint)
-        
-        dataModel.labels.append(String(dataModel.points.count))
     }
     
     @IBAction func viewTapped(sender: UITapGestureRecognizer) {
@@ -91,12 +87,7 @@ class TracerViewController: UIViewController {
         parabolicButton.style = .Plain
 
     }
-    
-    override func viewDidLayoutSubviews() {
-        let frameSize = tracerView.frame.size
-        dataModel.motionFunction = dataModel.showingCircularMotion ? circularMotionFunctionForFrameSize(frameSize) : parabolicMotionFunctionForFrameSize(frameSize)
-    }
-    
+        
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         animationTiming.tracerResetTime = CFAbsoluteTimeGetCurrent()
@@ -112,7 +103,7 @@ class TracerViewController: UIViewController {
     
     func prepareForVSync(displayLink: CADisplayLink) {
         animationTiming.tracerTimeInterval = CFAbsoluteTimeGetCurrent() + displayLink.duration - animationTiming.tracerResetTime
-        dataModel.regenerateTracerPoints()
+        dataModel.regenerateTracerPoints(tracerView.frame.size)
         tracerView.setNeedsDisplay()
     }
 

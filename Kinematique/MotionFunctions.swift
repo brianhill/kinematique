@@ -12,33 +12,34 @@ import CoreGraphics
 
 typealias MotionFunction = (CFTimeInterval) -> CGPoint?
 
-// Circular motion parameters
-private let radius: CGFloat = 250.0
+// Motion parameters
 private let period: CFTimeInterval = 10
+
+// Circular motion parameters
+private let radius: CGFloat = 0.375
 
 // Parabolic motion parameters
 private let transitTime: CFTimeInterval = 8
-private let transitWidth: CGFloat = 600
-private let initialVerticalVelocity: CGFloat = 300
+private let transitWidth: CGFloat = 0.75
+private let initialVerticalVelocity: CGFloat = 0.375
 private let verticalDeceleration: CGFloat = 2 * initialVerticalVelocity / CGFloat(transitTime)
-private let doOverTime: CFTimeInterval = 10
-private let initialAltitude: CGFloat = 40
+private let initialAltitude: CGFloat = 0.05
 
-func circularMotionFunctionForFrameSize(frameSize: CGSize) -> MotionFunction {
+func circularMotionFunction() -> MotionFunction {
     return { (timeInterval: CFTimeInterval) -> CGPoint? in
         let angle = CGFloat(2) * CGFloat(M_PI) * CGFloat(timeInterval) / CGFloat(period)
-        let x = radius * cos(angle) + frameSize.width / 2
-        let y = frameSize.height / 2 - radius * sin(angle)
+        let x = radius * cos(angle)
+        let y = radius * sin(angle)
         return CGPointMake(x, y)
     }
 }
 
-func parabolicMotionFunctionForFrameSize(frameSize: CGSize) -> MotionFunction {
+func parabolicMotionFunction() -> MotionFunction {
     return { (timeInterval: CFTimeInterval) -> CGPoint? in
-        let remainder = timeInterval % doOverTime
+        let remainder = timeInterval % period
         if remainder < 0 || remainder > transitTime { return nil }
-        let x: CGFloat = transitWidth * (CGFloat(remainder) / CGFloat(transitTime) - 1 / 2) + frameSize.width / 2
-        let y: CGFloat = frameSize.height - initialVerticalVelocity * CGFloat(remainder) + verticalDeceleration * CGFloat(remainder) * CGFloat(remainder) / 2 - initialAltitude
+        let x: CGFloat = transitWidth * (CGFloat(remainder) / CGFloat(transitTime) - 0.5)
+        let y: CGFloat = initialVerticalVelocity * CGFloat(remainder) - verticalDeceleration * CGFloat(remainder) * CGFloat(remainder) / 2 + initialAltitude - 0.5
         return CGPointMake(x, y)
     }
 }

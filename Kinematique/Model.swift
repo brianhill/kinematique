@@ -26,8 +26,6 @@ class DataModel {
     
     var origin: CGPoint?
     
-    var initialTime: CFTimeInterval! = nil
-    
     var points: [CGPoint] = []
     
     // Sanitized points can be nil! They are in 1:1 correspondence with points. Sometimes the
@@ -57,21 +55,34 @@ class DataModel {
     }
     
     var showingCircularMotion = true
-    
-    var motionFunction: MotionFunction! = nil
-    
+        
     var tracerPoints: [CGPoint?] = Array<CGPoint?>(count: _shadowQuantity, repeatedValue:nil)
     
-    func regenerateTracerPoints() {
-        guard let currentMotionFunction = motionFunction else {
-            tracerPoints = Array<CGPoint?>(count: _shadowQuantity, repeatedValue:nil)
-            return
+    func motionFunction() -> MotionFunction {
+        return showingCircularMotion ? circularMotionFunction() : parabolicMotionFunction()
+    }
+    
+    func scaleTracerPoint(frameSize: CGSize, tracerPoint: CGPoint) -> CGPoint {
+        if showingCircularMotion {
+            let smallerDimension = frameSize.height < frameSize.width ? frameSize.height : frameSize.width
+            return CGPointMake(tracerPoint.x * smallerDimension, tracerPoint.y * smallerDimension)
+        } else {
+            return CGPointMake(tracerPoint.x * frameSize.width, tracerPoint.y * frameSize.height)
         }
+    }
+    
+    func translateTracerPoint(frameSize: CGSize, scaledTracerPoint: CGPoint) -> CGPoint {
+        return CGPointMake(scaledTracerPoint.x + frameSize.width / 2, frameSize.height / 2 - scaledTracerPoint.y)
+    }
+    
+    func regenerateTracerPoints(frameSize: CGSize) {
+        let currentMotionFunction = motionFunction()
         for i in 0..<_shadowQuantity {
             let shadowFraction = CFTimeInterval(i) / CFTimeInterval(_shadowQuantity)
             let shadowTime = shadowFraction * _shadowDuration
             let shadowTimeInterval = anmimationTiming.tracerTimeInterval - shadowTime
-            tracerPoints[i] = currentMotionFunction(shadowTimeInterval)
+            let tracerPoint = currentMotionFunction(shadowTimeInterval)
+            tracerPoints[i] = tracerPoint != nil ? translateTracerPoint(frameSize, scaledTracerPoint: scaleTracerPoint(frameSize, tracerPoint: tracerPoint!)) : nil
         }
     }
     
